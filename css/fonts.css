@@ -1,0 +1,130 @@
+/* Local fonts keep the typography consistent when a visitor cannot reach Google Fonts. */
+@font-face {
+  font-family: "Butler Sans";
+  src: url("../assets/fonts/roboto-condensed-cyrillic.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: block;
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: "Butler Sans";
+  src: url("../assets/fonts/roboto-condensed-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: block;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2113, U+2190-21FF, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Butler Display";
+  src: url("../assets/fonts/russo-one-cyrillic.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: "Butler Display";
+  src: url("../assets/fonts/russo-one-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2113, U+2190-21FF, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Butler Mono";
+  src: url("../assets/fonts/ibm-plex-mono-400-cyrillic.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: "Butler Mono";
+  src: url("../assets/fonts/ibm-plex-mono-400-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 400;
+  font-display: block;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2113, U+2190-21FF, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Butler Mono";
+  src: url("../assets/fonts/ibm-plex-mono-500-cyrillic.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+  font-display: block;
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: "Butler Mono";
+  src: url("../assets/fonts/ibm-plex-mono-500-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+  font-display: block;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2113, U+2190-21FF, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Butler Mono";
+  src: url("../assets/fonts/ibm-plex-mono-600-cyrillic.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+  font-display: block;
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: "Butler Mono";
+  src: url("../assets/fonts/ibm-plex-mono-600-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 600;
+  font-display: block;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2113, U+2190-21FF, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Butler Serif";
+  src: url("../assets/fonts/ibm-plex-serif-500-cyrillic.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+  font-display: block;
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: "Butler Serif";
+  src: url("../assets/fonts/ibm-plex-serif-500-latin.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 500;
+  font-display: block;
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2113, U+2190-21FF, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  --mono: "Butler Mono", ui-monospace, Consolas, monospace;
+  --sans: "Butler Sans", "Arial Narrow", Arial, sans-serif;
+  --serif: "Butler Serif", Georgia, serif;
+  --heavy: "Butler Display", "Arial Black", sans-serif;
+}
+
+/* The previous display fallback was Impact, whose Windows line metrics are taller.
+   These values retain the compact composition without letting Cyrillic lines collide. */
+.bb-site h1,
+.bb-site h2,
+.bb-site h3,
+.ari-site h1,
+.ari-site h2,
+.ari-site h3,
+.ari-portal h1,
+.ari-portal h2,
+.ari-portal h3 {
+  line-height: 0.9;
+  font-synthesis: none;
+}
