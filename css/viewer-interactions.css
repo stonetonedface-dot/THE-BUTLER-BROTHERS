@@ -1,0 +1,1 @@
+.viewer-stage.is-dragging{outline:3px solid var(--acid);outline-offset:-3px}.viewer-stage.is-dragging .viewer-empty{background:rgba(230,255,53,.07);opacity:1}.local-model-button{position:relative;overflow:hidden}.local-model-button input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;pointer-events:auto}

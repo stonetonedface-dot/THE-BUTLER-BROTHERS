@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="3D-просмотрщик моделей The Butler Brothers и Atlantic Radio Interconnect." />
+    <title>3D-модели — The Butler Brothers</title>
+    <link rel="stylesheet" href="css/golden-ratio.css" />
+    <link rel="stylesheet" href="css/fonts.css" />
+    <link rel="stylesheet" href="css/viewer.css" />
+    <link rel="stylesheet" href="css/viewer-interactions.css" />
+  </head>
+  <body class="ari-portal models-page">
+    <div class="film-grain" aria-hidden="true"></div>
+    <div class="corner-index" aria-hidden="true">A.R.I. / 1994<br />MODEL LAB</div>
+
+    <header class="portal-header" id="top">
+      <a class="ari-logo" href="index.html" aria-label="The Butler Brothers — на главную">
+        <span class="ari-disc">A<span>R</span>I</span>
+        <span>ATLANTIC RADIO<br /><b>INTERCONNECT</b></span>
+      </a>
+      <nav class="portal-nav" aria-label="Навигация студии">
+        <a href="index.html#about">О нас</a>
+        <details class="project-nav">
+          <summary>Проекты <span>+</span></summary>
+          <div class="project-panel">
+            <details class="project-group"><summary>Игры <i>→</i></summary><div class="project-subpanel"><a href="golden-ratio.html">Golden Ratio <small>в разработке</small></a></div></details>
+            <details class="project-group"><summary>Фильмы <i>→</i></summary><div class="project-subpanel"><a href="https://vk.ru/wall-231162998_2" target="_blank" rel="noreferrer">Анемоя <small>описание</small></a><a href="https://vk.ru/video-231162998_456239020" target="_blank" rel="noreferrer">Смотреть фильм <small>VK ↗</small></a></div></details>
+            <a href="index.html#archive">Анимация <small>архив</small></a>
+            <a class="project-current" href="#viewer">3D-модели <small>viewer</small></a>
+          </div>
+        </details>
+        <a href="join.html">Присоединиться</a>
+        <a href="blog.html">Блог</a>
+        <a href="authors.html">Авторы</a>
+      </nav>
+      <button class="portal-menu" type="button" aria-expanded="false">МЕНЮ <span>≡</span></button>
+    </header>
+    <nav class="mobile-drawer" hidden aria-label="Мобильная навигация">
+      <a href="index.html#about">О нас</a><a href="golden-ratio.html">Golden Ratio</a><a href="https://vk.ru/wall-231162998_2" target="_blank" rel="noreferrer">Анемоя</a><a href="#viewer">3D-модели</a><a href="join.html">Присоединиться</a><a href="blog.html">Блог</a><a href="authors.html">Авторы</a>
+    </nav>
+
+    <div class="notice-bar"><span>MODEL LAB / ДОСТУП ДЛЯ ПОСЕТИТЕЛЕЙ</span><span>•</span><span>ЛОКАЛЬНЫЕ ФАЙЛЫ НЕ ПОКИДАЮТ УСТРОЙСТВО</span><span>•</span><span>ОРБИТАЛЬНАЯ КАМЕРА АКТИВНА</span></div>
+
+    <main class="model-lab" id="viewer">
+      <header class="lab-heading">
+        <div>
+          <p class="eyebrow">ATLANTIC RADIO INTERCONNECT / MODEL ARCHIVE</p>
+          <h1>3D <span>МОДЕЛИ.</span></h1>
+        </div>
+        <p>Откройте модель прямо в браузере: с компьютера, по прямой ссылке или перетаскиванием файла. Локальные файлы остаются только на вашем устройстве.</p>
+      </header>
+
+      <section class="viewer-layout" data-viewer-root>
+        <div class="viewer-terminal">
+          <div class="viewer-topbar">
+            <span>ARI / 3D VIEWER <b data-viewer-state>STANDBY</b></span>
+            <button class="viewer-text-button" type="button" data-fullscreen>FULLSCREEN <b>↗</b></button>
+          </div>
+
+          <div class="viewer-stage" data-viewer-stage>
+            <div class="viewer-canvas" data-viewer-canvas aria-label="Интерактивный 3D-просмотрщик"></div>
+            <div class="viewer-grid" aria-hidden="true"></div>
+            <div class="viewer-empty" data-viewer-empty>
+              <span class="empty-mark">ARI</span>
+              <strong>DROP 3D MODEL HERE</strong>
+              <p>GLB / GLTF · FILE STAYS LOCAL</p>
+            </div>
+            <div class="viewer-status" data-viewer-status aria-live="polite">READY FOR MODEL INPUT</div>
+            <div class="viewer-progress" data-viewer-progress aria-hidden="true"><i data-viewer-progress-bar></i></div>
+            <aside class="model-info" data-model-info aria-label="Информация о модели">
+              <p>MODEL INFO</p>
+              <dl>
+                <div data-info-name><dt>NAME</dt><dd data-model-name>—</dd></div>
+                <div data-info-format><dt>FORMAT</dt><dd data-model-format>—</dd></div>
+                <div data-info-size hidden><dt>SIZE</dt><dd data-model-size></dd></div>
+                <div data-info-animations hidden><dt>ANIMATIONS</dt><dd data-model-animations></dd></div>
+                <div data-info-materials hidden><dt>MATERIALS</dt><dd data-model-materials></dd></div>
+              </dl>
+            </aside>
+          </div>
+
+          <div class="viewer-toolbar">
+            <button type="button" data-reset-camera disabled>RESET CAMERA <b>↺</b></button>
+            <button type="button" data-auto-rotate aria-pressed="false" disabled>AUTO ROTATE <b>○</b></button>
+            <button type="button" data-lighting disabled>LIGHTING <b>01</b></button>
+            <label class="local-model-button">OPEN LOCAL MODEL <b>+</b><input data-model-file type="file" accept=".glb,.gltf,.bin,image/*" multiple /></label>
+          </div>
+        </div>
+
+        <aside class="viewer-inspector">
+          <section class="inspector-panel model-url-panel">
+            <p class="panel-label">REMOTE INPUT / DIRECT FILE ONLY</p>
+            <label for="model-url">MODEL URL</label>
+            <input id="model-url" data-model-url type="url" inputmode="url" placeholder="https://example.com/model.glb" autocomplete="url" />
+            <button type="button" data-load-url>LOAD MODEL <b>→</b></button>
+            <small>Если сервер не разрешает CORS, модель не сможет загрузиться.</small>
+          </section>
+
+          <section class="inspector-panel animation-panel">
+            <div class="panel-header"><p>ANIMATIONS</p><span data-animation-count>00</span></div>
+            <div class="animation-list" data-animation-list><p class="empty-panel">NO ANIMATIONS FOUND</p></div>
+            <div class="animation-controls">
+              <button type="button" data-animation-play disabled>PLAY</button>
+              <button type="button" data-animation-pause disabled>PAUSE</button>
+              <button type="button" data-animation-stop disabled>STOP</button>
+              <label><input type="checkbox" data-animation-loop checked disabled /> LOOP</label>
+            </div>
+          </section>
+
+          <section class="inspector-panel materials-panel">
+            <div class="panel-header"><p>MATERIALS</p><span data-material-count>00</span></div>
+            <ul class="material-list" data-material-list><li class="empty-panel">NO MATERIALS DETECTED</li></ul>
+          </section>
+
+          <p class="viewer-help">LMB / ROTATE &nbsp;·&nbsp; WHEEL / ZOOM &nbsp;·&nbsp; RMB / MOVE</p>
+        </aside>
+      </section>
+
+      <section class="lab-notes">
+        <div><b>01</b><p>Файлы с компьютера обрабатываются через File API и не отправляются на сервер.</p></div>
+        <div><b>02</b><p>Для `.gltf` с отдельными текстурами или `.bin` выберите либо перетащите все связанные файлы одновременно.</p></div>
+        <div><b>03</b><p>Внешняя ссылка должна вести прямо к `.glb` или `.gltf` и разрешать CORS.</p></div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-logo"><span class="ari-disc">A<span>R</span>I</span><b>ATLANTIC RADIO INTERCONNECT</b></div>
+      <div>© 2026 THE BUTLER BROTHERS<br /><p>MODEL ARCHIVE / LOCAL VIEWER</p></div>
+      <div class="footer-channels"><a href="index.html">ГЛАВНАЯ</a><a href="golden-ratio.html">GOLDEN RATIO</a></div>
+    </footer>
+
+    <script type="importmap">
+      { "imports": { "three": "./js/vendor/three.module.js" } }
+    </script>
+    <script type="module" src="js/viewer.js?v=20261002d"></script>
+  </body>
+</html>
