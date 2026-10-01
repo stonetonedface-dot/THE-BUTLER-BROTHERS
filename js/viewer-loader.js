@@ -1,13 +1,14 @@
 import { LoadingManager } from 'three';
+import { FBXLoader } from './vendor/addons/loaders/FBXLoader.js';
 import { GLTFLoader } from './vendor/addons/loaders/GLTFLoader.js';
 
-const supportedModel = /\.(glb|gltf)$/i;
+const supportedModel = /\.(glb|gltf|fbx)$/i;
 
 export const getExtension = (name = '') => name.split('?')[0].split('#')[0].split('.').pop().toUpperCase();
 
 export function displayName(name = 'UNTITLED MODEL') {
   const finalPart = name.split('/').pop().split('?')[0];
-  return decodeURIComponent(finalPart).replace(/\.(glb|gltf)$/i, '') || 'UNTITLED MODEL';
+  return decodeURIComponent(finalPart).replace(/\.(glb|gltf|fbx)$/i, '') || 'UNTITLED MODEL';
 }
 
 export function disposeObject3D(root) {
@@ -28,7 +29,8 @@ export function disposeObject3D(root) {
 export class ModelLoader {
   constructor() {
     this.manager = new LoadingManager();
-    this.loader = new GLTFLoader(this.manager);
+    this.gltfLoader = new GLTFLoader(this.manager);
+    this.fbxLoader = new FBXLoader(this.manager);
     this.objectUrls = [];
   }
 
@@ -41,7 +43,12 @@ export class ModelLoader {
   async loadLocal(files) {
     const list = [...files];
     const primary = list.find((file) => supportedModel.test(file.name));
-    if (!primary) throw new Error('INVALID FILE FORMAT. SELECT A .GLB OR .GLTF MODEL.');
+    if (!primary) {
+      if (list.some((file) => /\.blend$/i.test(file.name))) {
+        throw new Error('BLEND IS A BLENDER SOURCE FILE. EXPORT IT AS .GLB FIRST.');
+      }
+      throw new Error('INVALID FILE FORMAT. SELECT A .GLB, .GLTF OR .FBX MODEL.');
+    }
 
     this.clearLocalResources();
     const resourceMap = new Map();
@@ -57,17 +64,22 @@ export class ModelLoader {
     });
 
     const buffer = await primary.arrayBuffer();
-    const gltf = await new Promise((resolve, reject) => this.loader.parse(buffer, '', resolve, reject));
-    return { gltf, source: { name: primary.name, size: primary.size, format: getExtension(primary.name), local: true } };
+    const format = getExtension(primary.name);
+    const gltf = format === 'FBX'
+      ? { scene: this.fbxLoader.parse(buffer, ''), animations: [] }
+      : await new Promise((resolve, reject) => this.gltfLoader.parse(buffer, '', resolve, reject));
+    if (format === 'FBX') gltf.animations = gltf.scene.animations || [];
+    return { gltf, source: { name: primary.name, size: primary.size, format, local: true } };
   }
 
   async loadRemote(url, onProgress) {
     this.clearLocalResources();
-    if (!supportedModel.test(new URL(url).pathname)) throw new Error('MODEL URL MUST POINT DIRECTLY TO A .GLB OR .GLTF FILE.');
+    const format = getExtension(new URL(url).pathname);
+    if (!supportedModel.test(new URL(url).pathname)) throw new Error('MODEL URL MUST POINT DIRECTLY TO A .GLB, .GLTF OR .FBX FILE.');
 
-    const gltf = await new Promise((resolve, reject) => {
-      this.loader.load(url, resolve, onProgress, reject);
-    });
-    return { gltf, source: { name: displayName(url), format: getExtension(url), local: false } };
+    const gltf = format === 'FBX'
+      ? await new Promise((resolve, reject) => this.fbxLoader.load(url, (scene) => resolve({ scene, animations: scene.animations || [] }), onProgress, reject))
+      : await new Promise((resolve, reject) => this.gltfLoader.load(url, resolve, onProgress, reject));
+    return { gltf, source: { name: displayName(url), format, local: false } };
   }
 }
