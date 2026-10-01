@@ -1,0 +1,15 @@
+/* The viewer page has a dark body, while its navigation stays on light paper. */
+.models-page .portal-header {
+  color: var(--ink);
+}
+
+.models-page .portal-nav > a,
+.models-page .project-nav > summary {
+  color: var(--ink);
+  text-shadow: none;
+}
+
+.models-page .project-panel,
+.models-page .project-group > summary {
+  color: var(--ink);
+}
