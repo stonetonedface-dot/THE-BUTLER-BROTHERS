@@ -28,15 +28,7 @@ python3 -m http.server 5500
 - **My Google Drive** — Google Identity Services получает краткоживущий OAuth‑токен только в памяти вкладки, а пользователь просматривает свои папки Drive;
 - **Публичная папка Google Drive** — пользователь вставляет ссылку на папку, открытую «для всех, у кого есть ссылка», и видит только `.glb` файлы. Вход в Google в этом сценарии не нужен.
 
-Для публичных папок создайте локальный файл `js/google-drive-public-config.local.json` по образцу [js/google-drive-public-config.example.json](js/google-drive-public-config.example.json):
-
-```json
-{
-  "GOOGLE_DRIVE_API_KEY": "ВАШ_КЛЮЧ"
-}
-```
-
-Этот локальный конфиг исключён через `.gitignore`; реальный ключ не попадёт в Git. Это frontend‑проект, поэтому ключ будет доступен браузеру: ограничьте его в Google Cloud Console только **Google Drive API** и HTTP referrer‑адресами сайта. `.env` и его варианты также исключены через `.gitignore`, но простой статический сайт не умеет читать `.env` без сборщика.
+Для публичных папок Viewer читает браузерный key из `src/config/google-drive-public-config.json`. Этот config является частью статической сборки: API key доступен в браузере и должен быть ограничен в Google Cloud Console только **Google Drive API** и HTTP referrer‑адресами сайта. `.env` и его варианты исключены через `.gitignore`, но простой статический сайт не умеет читать `.env` без сборщика.
 
 Перед первым использованием в Google Cloud Console для OAuth‑проекта нужно включить **Google Drive API**, настроить OAuth consent screen и разрешить scope `https://www.googleapis.com/auth/drive.readonly`. Для приложения в режиме Testing добавьте нужные аккаунты в Test users. В Authorized JavaScript origins должны быть `http://localhost:5500` и адрес опубликованного сайта. Этот scope нужен, чтобы пользователь мог просматривать свои папки и скачивать выбранную модель; он относится к restricted scopes, поэтому для общего публичного доступа может потребоваться OAuth verification от Google.
 

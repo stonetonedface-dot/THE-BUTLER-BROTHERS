@@ -163,7 +163,7 @@ let publicDriveApiKeyPromise;
 
 const getPublicDriveApiKey = () => {
   if (!publicDriveApiKeyPromise) {
-    const configUrl = new URL('./google-drive-public-config.local.json', import.meta.url);
+    const configUrl = new URL('../src/config/google-drive-public-config.json', import.meta.url);
     publicDriveApiKeyPromise = fetch(configUrl, { cache: 'no-store' })
       .then((response) => response.ok ? response.json() : {})
       .then((config) => String(config.GOOGLE_DRIVE_API_KEY || '').trim())
