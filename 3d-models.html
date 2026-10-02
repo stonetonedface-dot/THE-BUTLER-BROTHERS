@@ -92,7 +92,7 @@
 
         <aside class="viewer-inspector">
           <section class="inspector-panel drive-panel" data-drive-panel>
-            <div class="panel-header"><p>GOOGLE DRIVE</p><span data-drive-state>OFFLINE</span></div>
+            <div class="panel-header"><p>MY GOOGLE DRIVE</p><span data-drive-state>OFFLINE</span></div>
             <p class="drive-account" data-drive-account aria-live="polite">GOOGLE DRIVE NOT CONNECTED</p>
             <button class="drive-button drive-connect" type="button" data-drive-connect>CONNECT GOOGLE DRIVE <b>+</b></button>
             <div class="drive-actions" data-drive-actions hidden>
@@ -105,6 +105,19 @@
               <ul class="drive-folder-list" data-drive-folders></ul>
               <p class="panel-label drive-model-title">3D MODELS</p>
               <ul class="drive-model-list" data-drive-models></ul>
+            </div>
+          </section>
+
+          <section class="inspector-panel public-drive-panel" data-public-drive-panel>
+            <div class="panel-header"><p>ПУБЛИЧНАЯ ПАПКА GOOGLE DRIVE</p><span>NO AUTH</span></div>
+            <label for="public-drive-folder-url">ВСТАВЬТЕ ССЫЛКУ НА ПУБЛИЧНУЮ GOOGLE DRIVE ПАПКУ</label>
+            <input id="public-drive-folder-url" data-public-drive-url type="url" inputmode="url" placeholder="https://drive.google.com/drive/folders/..." autocomplete="url" />
+            <button class="public-drive-load" type="button" data-public-drive-load>ЗАГРУЗИТЬ <b>→</b></button>
+            <p class="public-drive-note">Авторизация Google не требуется.</p>
+            <p class="public-drive-message" data-public-drive-message aria-live="polite">Вставьте ссылку на папку, открытую для всех, у кого есть ссылка.</p>
+            <div class="public-drive-browser" data-public-drive-browser hidden>
+              <p class="panel-label" data-public-drive-location>МОДЕЛИ</p>
+              <ul class="public-drive-model-list" data-public-drive-models></ul>
             </div>
           </section>
 
@@ -153,6 +166,6 @@
       { "imports": { "three": "./js/vendor/three.module.js" } }
     </script>
     <script src="https://accounts.google.com/gsi/client" async defer data-google-identity></script>
-    <script type="module" src="js/viewer.js?v=20261002-drive"></script>
+    <script type="module" src="js/viewer.js?v=20261003-public-drive"></script>
   </body>
 </html>

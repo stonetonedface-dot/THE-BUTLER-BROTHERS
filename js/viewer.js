@@ -1,4 +1,5 @@
 import { GoogleDriveClient, GoogleDriveError } from './google-drive.js?v=20261002-drive';
+import { downloadPublicGlb, extractPublicFolderLink, listPublicGlbModels, PublicDriveError } from './google-drive-public.js?v=20261003-public-drive';
 import { disposeObject3D, ModelLoader, displayName } from './viewer-loader.js?v=20261002d';
 import { ViewerScene } from './viewer-controls.js?v=20261002d';
 import { ViewerUI } from './viewer-ui.js?v=20261002d';
@@ -28,6 +29,12 @@ const driveBrowser = root.querySelector('[data-drive-browser]');
 const driveLocation = root.querySelector('[data-drive-location]');
 const driveFolders = root.querySelector('[data-drive-folders]');
 const driveModels = root.querySelector('[data-drive-models]');
+const publicDriveUrl = root.querySelector('[data-public-drive-url]');
+const publicDriveLoad = root.querySelector('[data-public-drive-load]');
+const publicDriveMessage = root.querySelector('[data-public-drive-message]');
+const publicDriveBrowser = root.querySelector('[data-public-drive-browser]');
+const publicDriveLocation = root.querySelector('[data-public-drive-location]');
+const publicDriveModels = root.querySelector('[data-public-drive-models]');
 let currentRoot = null;
 let clips = [];
 let driveFolder = null;
@@ -83,7 +90,7 @@ const acceptModel = ({ gltf, source }) => {
   ui.setMaterials(materials);
   ui.setModelControls(true);
   ui.setAnimationControls(Boolean(clips.length));
-  const origin = source.drive ? 'GOOGLE DRIVE' : source.local ? 'LOCAL FILE' : 'REMOTE URL';
+  const origin = source.publicDrive ? 'PUBLIC DRIVE' : source.drive ? 'GOOGLE DRIVE' : source.local ? 'LOCAL FILE' : 'REMOTE URL';
   ui.setStatus(`MODEL READY / ${source.format} / ${origin}`, 'loaded');
   ui.setProgress(null);
 };
@@ -150,6 +157,99 @@ const reportDriveError = (error, fallback = 'MODEL LOAD FAILED.') => {
   setDriveMessage(message, true);
   ui.setStatus(message, 'error');
   ui.setProgress(null);
+};
+
+let publicDriveApiKeyPromise;
+
+const getPublicDriveApiKey = () => {
+  if (!publicDriveApiKeyPromise) {
+    const configUrl = new URL('./google-drive-public-config.local.json', import.meta.url);
+    publicDriveApiKeyPromise = fetch(configUrl, { cache: 'no-store' })
+      .then((response) => response.ok ? response.json() : {})
+      .then((config) => String(config.GOOGLE_DRIVE_API_KEY || '').trim())
+      .catch(() => '');
+  }
+  return publicDriveApiKeyPromise;
+};
+
+const setPublicDriveBusy = (busy) => {
+  publicDriveUrl.disabled = busy;
+  publicDriveLoad.disabled = busy;
+  publicDriveModels.querySelectorAll('button').forEach((button) => { button.disabled = busy; });
+};
+
+const setPublicDriveMessage = (message, error = false) => {
+  publicDriveMessage.textContent = message;
+  publicDriveMessage.classList.toggle('is-error', error);
+};
+
+const reportPublicDriveError = (error, fallback = 'Не удалось получить содержимое папки.') => {
+  console.error(error);
+  const message = error instanceof PublicDriveError ? error.message : fallback;
+  setPublicDriveMessage(message, true);
+  ui.setStatus(message.toUpperCase(), 'error');
+  ui.setProgress(null);
+};
+
+const clearPublicDriveModels = () => publicDriveModels.replaceChildren();
+
+const loadPublicDriveModel = async (model) => {
+  setBusy(true);
+  setPublicDriveBusy(true);
+  ui.setStatus('LOADING PUBLIC DRIVE MODEL...', 'loading');
+  ui.setProgress(18);
+  setPublicDriveMessage(`Загрузка / ${model.name}`);
+  try {
+    const file = await downloadPublicGlb(model, await getPublicDriveApiKey());
+    ui.setProgress(86);
+    const result = await loader.loadLocal([file]);
+    result.source.publicDrive = true;
+    acceptModel(result);
+    setPublicDriveMessage(`Загружено / ${model.name}`);
+  } catch (error) {
+    reportPublicDriveError(error, 'Не удалось загрузить модель.');
+  } finally {
+    setBusy(false);
+    setPublicDriveBusy(false);
+  }
+};
+
+const renderPublicDriveModels = (models) => {
+  clearPublicDriveModels();
+  models.forEach((model) => {
+    const item = document.createElement('li');
+    item.append(makeDriveButton(model.name, 'ОТКРЫТЬ', () => loadPublicDriveModel(model)));
+    publicDriveModels.append(item);
+  });
+};
+
+const loadPublicDriveFolder = async () => {
+  let folderLink;
+  try {
+    folderLink = extractPublicFolderLink(publicDriveUrl.value);
+  } catch (error) {
+    return reportPublicDriveError(error);
+  }
+
+  setPublicDriveBusy(true);
+  setPublicDriveMessage('Получение содержимого публичной папки...');
+  try {
+    const { folder, models } = await listPublicGlbModels(folderLink, await getPublicDriveApiKey());
+    publicDriveLocation.textContent = `МОДЕЛИ / ${folder.name}`;
+    publicDriveBrowser.hidden = false;
+    renderPublicDriveModels(models);
+    if (!models.length) {
+      setPublicDriveMessage('В папке нет GLB-моделей.', true);
+      ui.setStatus('В ПАПКЕ НЕТ GLB-МОДЕЛЕЙ.', 'ready');
+      return;
+    }
+    setPublicDriveMessage(`Найдено моделей: ${models.length}. Выберите модель для просмотра.`);
+    ui.setStatus('PUBLIC DRIVE FOLDER READY.', 'loaded');
+  } catch (error) {
+    reportPublicDriveError(error);
+  } finally {
+    setPublicDriveBusy(false);
+  }
 };
 
 const clearDriveList = (list) => list.replaceChildren();
@@ -263,6 +363,8 @@ fileInput.addEventListener('change', () => loadLocal(fileInput.files));
 urlButton.addEventListener('click', loadRemote);
 urlInput.addEventListener('keydown', (event) => { if (event.key === 'Enter') loadRemote(); });
 driveConnect.addEventListener('click', connectGoogleDrive);
+publicDriveLoad.addEventListener('click', loadPublicDriveFolder);
+publicDriveUrl.addEventListener('keydown', (event) => { if (event.key === 'Enter') loadPublicDriveFolder(); });
 driveSelectFolder.addEventListener('click', () => {
   driveTrail.length = 0;
   openDriveFolder({ id: 'root', name: 'MY DRIVE' });

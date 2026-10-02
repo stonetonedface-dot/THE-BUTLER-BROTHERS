@@ -1,0 +1,4 @@
+.env
+.env.*
+!.env.example
+js/google-drive-public-config.local.json
