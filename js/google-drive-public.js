@@ -20,7 +20,7 @@ const resourceKeyHeaders = (file) => file?.resourceKey
 const errorFromResponse = async (response, action) => {
   const payload = await response.json().catch(() => null);
   const message = payload?.error?.message || '';
-  if (response.status === 404) return new PublicDriveError('FOLDER_UNAVAILABLE', 'Папка недоступна.');
+  if (response.status === 404) return new PublicDriveError('FOLDER_UNAVAILABLE', 'Папка недоступна. Проверьте, что она открыта для всех, у кого есть ссылка.');
   if (response.status === 401 || response.status === 403) {
     if (/api key|referer|referrer/i.test(message)) return new PublicDriveError('API_KEY_REJECTED', 'Не удалось получить содержимое папки.');
     return new PublicDriveError('FOLDER_NOT_PUBLIC', 'Папка не является публичной.');
