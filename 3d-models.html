@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="css/viewer.css" />
     <link rel="stylesheet" href="css/viewer-navigation.css" />
     <link rel="stylesheet" href="css/viewer-interactions.css" />
+    <link rel="stylesheet" href="css/viewer-drive.css" />
   </head>
   <body class="ari-portal models-page">
     <div class="film-grain" aria-hidden="true"></div>
@@ -90,6 +91,23 @@
         </div>
 
         <aside class="viewer-inspector">
+          <section class="inspector-panel drive-panel" data-drive-panel>
+            <div class="panel-header"><p>GOOGLE DRIVE</p><span data-drive-state>OFFLINE</span></div>
+            <p class="drive-account" data-drive-account aria-live="polite">GOOGLE DRIVE NOT CONNECTED</p>
+            <button class="drive-button drive-connect" type="button" data-drive-connect>CONNECT GOOGLE DRIVE <b>+</b></button>
+            <div class="drive-actions" data-drive-actions hidden>
+              <button class="drive-button" type="button" data-drive-select-folder>SELECT FOLDER <b>→</b></button>
+              <button class="drive-back" type="button" data-drive-back hidden>← BACK TO FOLDER</button>
+            </div>
+            <p class="drive-message" data-drive-message aria-live="polite">Авторизация работает только через сайт, открытый с `http://localhost:5500` или опубликованного домена.</p>
+            <div class="drive-browser" data-drive-browser hidden>
+              <p class="panel-label" data-drive-location>FOLDERS / MY DRIVE</p>
+              <ul class="drive-folder-list" data-drive-folders></ul>
+              <p class="panel-label drive-model-title">3D MODELS</p>
+              <ul class="drive-model-list" data-drive-models></ul>
+            </div>
+          </section>
+
           <section class="inspector-panel model-url-panel">
             <p class="panel-label">REMOTE INPUT / DIRECT FILE ONLY</p>
             <label for="model-url">MODEL URL</label>
@@ -134,6 +152,7 @@
     <script type="importmap">
       { "imports": { "three": "./js/vendor/three.module.js" } }
     </script>
-    <script type="module" src="js/viewer.js?v=20261002d"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer data-google-identity></script>
+    <script type="module" src="js/viewer.js?v=20261002-drive"></script>
   </body>
 </html>
